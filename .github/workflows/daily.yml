@@ -2,8 +2,8 @@ name: GTA VI Daily Memes
 
 on:
   schedule:
-    # Каждый день в 07:00 UTC (10:00 МСК). Формат cron: минута час день месяц день-недели
-    - cron: "0 7 * * *"
+    # Каждый день в 21:00 UTC = 00:00 МСК (UTC+3). Формат cron: минута час день месяц день-недели
+    - cron: "0 21 * * *"
   workflow_dispatch: {}   # позволяет запустить вручную из вкладки Actions
 
 permissions:
@@ -35,5 +35,5 @@ jobs:
           git config user.name "gta6-meme-bot"
           git config user.email "actions@users.noreply.github.com"
           git add docs
-          git diff --staged --quiet || git commit -m "Мемы GTA VI: $(date -u +'%Y-%m-%d')"
+          git diff --staged --quiet || git commit -m "Мемы GTA VI: $(TZ='Europe/Moscow' date +'%Y-%m-%d')"
           git push
