@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GTA VI — дайджест тем по дням</title>
+<title>GTA VI — топ мемов дня</title>
 <style>
   :root {
     color-scheme: light dark;
@@ -22,7 +22,7 @@
     color: var(--text);
     font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
   }
-  .wrap { max-width: 760px; margin: 0 auto; }
+  .wrap { max-width: 1100px; margin: 0 auto; }
   .top-row {
     display: flex;
     justify-content: space-between;
@@ -41,42 +41,69 @@
     padding: 8px 12px;
     font-size: 14px;
   }
-  .card {
-    display: flex;
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 16px;
+  }
+  .card {
+    position: relative;
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 18px 20px;
-    margin-bottom: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
   .rank {
-    flex-shrink: 0;
-    width: 28px;
-    height: 28px;
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     background: var(--accent);
     color: #1a1a1a;
     font-weight: 700;
-    font-size: 13px;
+    font-size: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 1;
   }
-  .card h2 { font-size: 16px; font-weight: 600; margin: 0 0 6px; }
-  .card p { font-size: 14px; color: var(--muted); margin: 0 0 10px; line-height: 1.5; }
-  .metric {
-    display: inline-block;
+  .thumb-link { display: block; background: #0a0b0e; }
+  .thumb {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+  }
+  .thumb.broken {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 40px;
+  }
+  .card-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .caption { font-size: 14px; line-height: 1.4; margin: 0; }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
     font-size: 12px;
-    color: var(--accent);
-    background: rgba(255, 122, 69, 0.12);
-    border-radius: 6px;
-    padding: 3px 8px;
-    margin-bottom: 8px;
+    color: var(--muted);
+    margin-top: auto;
   }
-  .sources { font-size: 12px; color: var(--muted); }
-  .sources a { color: #7fb8ff; text-decoration: none; margin-right: 4px; }
-  .sources a:hover { text-decoration: underline; }
+  .pill {
+    background: rgba(255, 122, 69, 0.12);
+    color: var(--accent);
+    border-radius: 6px;
+    padding: 2px 7px;
+  }
+  .links { font-size: 12px; }
+  .links a { color: #7fb8ff; text-decoration: none; }
+  .links a:hover { text-decoration: underline; }
   .empty { color: var(--muted); font-size: 14px; padding: 20px 0; }
   footer { margin-top: 32px; font-size: 12px; color: var(--muted); text-align: center; }
 </style>
@@ -84,12 +111,12 @@
 <body>
 <div class="wrap">
   <div class="top-row">
-    <h1>GTA VI — самые обсуждаемые темы</h1>
+    <h1>GTA VI — топ мемов дня</h1>
     <select id="day-select"></select>
   </div>
   <div class="sub" id="sub">Загрузка...</div>
-  <div id="cards"></div>
-  <footer>Собрано автоматически из Reddit, Google News и YouTube, обработано Claude</footer>
+  <div class="grid" id="cards"></div>
+  <footer>Собрано автоматически из Reddit (r/GTA6 и др.), отобрано и подписано Claude · обновляется раз в сутки</footer>
 </div>
 <script>
 const MONTHS_RU = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
@@ -104,47 +131,59 @@ function escapeHtml(s) {
   return String(s)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
-function renderTopics(topics) {
+function formatCount(n) {
+  if (n === null || n === undefined) return "0";
+  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "k";
+  return String(n);
+}
+
+function renderMemes(memes) {
   const container = document.getElementById("cards");
-  if (!topics || topics.length === 0) {
-    container.innerHTML = '<div class="empty">За этот день данных нет.</div>';
+  if (!memes || memes.length === 0) {
+    container.innerHTML = '<div class="empty">За этот день мемов нет.</div>';
     return;
   }
-  container.innerHTML = topics.map((t, i) => {
-    const sourcesHtml = (t.sources || [])
-      .filter(s => s && s.url)
-      .map(s => `<a href="${escapeHtml(s.url)}" target="_blank" rel="noopener">${escapeHtml(s.name)}</a>`)
-      .join(" · ");
-    const metricHtml = t.metric ? `<div class="metric">${escapeHtml(t.metric)}</div>` : "";
+  container.innerHTML = memes.map((m, i) => {
+    const img = escapeHtml(m.image_url);
+    const postUrl = escapeHtml(m.post_url);
     return `
       <div class="card">
         <div class="rank">${i + 1}</div>
-        <div>
-          <h2>${escapeHtml(t.title_ru)}</h2>
-          <p>${escapeHtml(t.summary_ru)}</p>
-          ${metricHtml}
-          <div class="sources">Источники: ${sourcesHtml || "—"}</div>
+        <a class="thumb-link" href="${postUrl}" target="_blank" rel="noopener">
+          <img class="thumb" src="${img}" loading="lazy" alt="мем GTA VI"
+               onerror="this.outerHTML='<div class=&quot;thumb broken&quot;>🖼️</div>'">
+        </a>
+        <div class="card-body">
+          <p class="caption">${escapeHtml(m.caption_ru)}</p>
+          <div class="meta">
+            <span class="pill">👍 ${formatCount(m.score)}</span>
+            <span class="pill">💬 ${formatCount(m.comments)}</span>
+            <span>${escapeHtml(m.subreddit)}</span>
+            <span>${m.date ? formatDateRu(m.date) : ""}</span>
+          </div>
+          <div class="links"><a href="${postUrl}" target="_blank" rel="noopener">Открыть на Reddit →</a></div>
         </div>
       </div>`;
   }).join("");
 }
 
 async function loadDay(iso) {
-  document.getElementById("sub").textContent = `Темы за ${formatDateRu(iso)} · загрузка...`;
+  document.getElementById("sub").textContent = `Мемы за ${formatDateRu(iso)} · загрузка...`;
   try {
     const res = await fetch(`archive/${iso}.json`);
     if (!res.ok) throw new Error("not found");
-    const topics = await res.json();
-    renderTopics(topics);
+    const memes = await res.json();
+    renderMemes(memes);
     document.getElementById("sub").textContent =
-      `Темы за ${formatDateRu(iso)} · всего: ${topics.length}`;
+      `Мемы за ${formatDateRu(iso)} · всего: ${memes.length}`;
   } catch (e) {
     document.getElementById("cards").innerHTML =
       '<div class="empty">Не удалось загрузить данные за этот день.</div>';
-    document.getElementById("sub").textContent = `Темы за ${formatDateRu(iso)}`;
+    document.getElementById("sub").textContent = `Мемы за ${formatDateRu(iso)}`;
   }
 }
 
