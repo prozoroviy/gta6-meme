@@ -116,7 +116,7 @@
   </div>
   <div class="sub" id="sub">Загрузка...</div>
   <div class="grid" id="cards"></div>
-  <footer>Собрано автоматически из Reddit (r/GTA6 и др.), отобрано и подписано Claude · обновляется раз в сутки</footer>
+  <footer>Собрано автоматически из Reddit (r/GTA6 и др.), отобрано и подписано Claude · обновляется раз в сутки · порядок — по популярности за день по версии Reddit (точные числа реакций Reddit не отдаёт без ключа)</footer>
 </div>
 <script>
 const MONTHS_RU = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
@@ -133,12 +133,6 @@ function escapeHtml(s) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
-}
-
-function formatCount(n) {
-  if (n === null || n === undefined) return "0";
-  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "k";
-  return String(n);
 }
 
 function renderMemes(memes) {
@@ -160,8 +154,7 @@ function renderMemes(memes) {
         <div class="card-body">
           <p class="caption">${escapeHtml(m.caption_ru)}</p>
           <div class="meta">
-            <span class="pill">👍 ${formatCount(m.score)}</span>
-            <span class="pill">💬 ${formatCount(m.comments)}</span>
+            <span class="pill">#${i + 1} по популярности</span>
             <span>${escapeHtml(m.subreddit)}</span>
             <span>${m.date ? formatDateRu(m.date) : ""}</span>
           </div>

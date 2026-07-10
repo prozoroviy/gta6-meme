@@ -4,16 +4,23 @@
 
 Собирает сырые данные:
   - Reddit (r/GTA6 и другие сабреддиты из REDDIT_SUBREDDITS), топ постов за сутки,
-    через публичный reddit.com/*.json (без ключа — самостоятельная регистрация
-    OAuth-приложений для Data API у Reddit сейчас закрыта для новых хобби-проектов).
-  - Из каждого поста берётся только визуальный контент (картинка/гифка/видео/
-    галерея) — текстовые посты и ссылки на статьи отбрасываются на этом шаге.
+    через публичную RSS/Atom-ленту reddit.com/r/.../top/.rss (без ключа).
+    Это НЕ основной выбор, а вынужденный: и самостоятельная регистрация
+    OAuth-приложений для Reddit Data API, и получение ключа Imgur сейчас закрыты
+    для новых хобби-проектов, а обычный reddit.com/*.json (даже без авторизации)
+    возвращает 403 и с датацентровых IP, и с раннеров GitHub Actions. RSS-лента —
+    единственный проверенный рабочий путь, но у неё есть ограничение: она не
+    отдаёт число апвоутов/комментариев, только заголовок, картинку, ссылку и дату.
+    Порядок постов в ленте уже отсортирован Reddit'ом по популярности за день,
+    поэтому позиция поста в списке — единственный доступный сигнал популярности.
+  - Из каждого поста берётся только визуальный контент (там, где RSS отдаёт
+    превью-картинку) — текстовые посты без картинки отбрасываются на этом шаге.
 
 Затем весь список сырых кандидатов отправляется одним запросом в Anthropic API
 (Claude), который:
   - убирает повторы (репосты одной и той же картинки под разными заголовками),
   - отсеивает то, что не является мемом (скриншоты, арт, серьёзные обсуждения),
-  - сортирует по популярности/смешности,
+  - сохраняет исходный порядок (популярность по версии Reddit),
   - добавляет короткую смешную подпись на русском (caption_ru),
   - оставляет не более MAX_MEMES штук.
 
@@ -29,7 +36,9 @@ import datetime as dt
 import html
 import json
 import os
+import re
 import sys
+import xml.etree.ElementTree as ET
 
 import requests
 
@@ -38,85 +47,74 @@ MAX_MEMES = 50
 
 REDDIT_USER_AGENT = "Mozilla/5.0 (compatible; gta6-daily-meme/1.0; +https://github.com/)"
 
-IMAGE_EXTENSIONS = (".jpg", ".jpeg", ".png", ".gif", ".gifv", ".webp")
+ATOM_NS = "{http://www.w3.org/2005/Atom}"
+MEDIA_NS = "{http://search.yahoo.com/mrss/}"
+
+# Домены-хосты, на которых Reddit реально хранит превью/картинки постов.
+# Всё остальное (иконки, аватары, generic-плейсхолдеры) — не мем, а служебная картинка.
+REDDIT_MEDIA_HOSTS = ("preview.redd.it", "i.redd.it", "external-preview.redd.it")
 
 # ---------------------------------------------------------------------------
-# Reddit: сбор сырых данных (публичный JSON, без ключа)
+# Reddit: сбор сырых данных (публичная RSS/Atom-лента, без ключа)
 # ---------------------------------------------------------------------------
 
 
-def extract_preview_image(d):
-    """Достаёт прямую ссылку на превью-картинку поста. Возвращает None, если пост не визуальный."""
-    url = d.get("url", "") or ""
+def extract_preview_image(entry):
+    """Достаёт прямую ссылку на превью-картинку записи RSS. Возвращает None, если это не мем-картинка."""
+    thumb_el = entry.find(f"{MEDIA_NS}thumbnail")
+    if thumb_el is not None:
+        url = thumb_el.get("url")
+        if url and any(host in url for host in REDDIT_MEDIA_HOSTS):
+            return html.unescape(url)
 
-    if d.get("is_gallery") and d.get("media_metadata"):
-        first = next(iter(d["media_metadata"].values()), None)
-        if first and first.get("s", {}).get("u"):
-            return html.unescape(first["s"]["u"])
-
-    preview = d.get("preview", {}).get("images", [])
-    if preview:
-        source_url = preview[0].get("source", {}).get("url")
-        if source_url:
-            return html.unescape(source_url)
-
-    if url.lower().endswith(IMAGE_EXTENSIONS):
-        return url
-
-    thumb = d.get("thumbnail", "")
-    if thumb.startswith("http"):
-        return thumb
+    content_el = entry.find(f"{ATOM_NS}content")
+    if content_el is not None and content_el.text:
+        content_html = html.unescape(content_el.text)
+        match = re.search(r'<img src="([^"]+)"', content_html)
+        if match:
+            url = html.unescape(match.group(1))
+            if any(host in url for host in REDDIT_MEDIA_HOSTS):
+                return url
 
     return None
 
 
-def is_visual_post(d):
-    hint = d.get("post_hint", "")
-    if hint in ("image", "hosted:video", "rich:video"):
-        return True
-    if d.get("is_gallery"):
-        return True
-    if (d.get("url") or "").lower().endswith(IMAGE_EXTENSIONS):
-        return True
-    return False
-
-
 def fetch_reddit_memes(subreddit, t="day", limit=100):
-    """Топ визуальных постов за сутки из сабреддита (публичный JSON, без ключа)."""
-    url = f"https://www.reddit.com/r/{subreddit}/top.json?t={t}&limit={limit}"
+    """Топ визуальных постов за сутки из сабреддита (публичная RSS-лента, без ключа)."""
+    url = f"https://www.reddit.com/r/{subreddit}/top/.rss?t={t}&limit={limit}"
     r = requests.get(
         url,
         headers={"User-Agent": REDDIT_USER_AGENT},
         timeout=15,
     )
     r.raise_for_status()
-    data = r.json()
+    root = ET.fromstring(r.content)
 
     items = []
-    for child in data.get("data", {}).get("children", []):
-        d = child.get("data", {})
-        if d.get("stickied") or d.get("over_18"):
-            continue
-        if not is_visual_post(d):
-            continue
-
-        image_url = extract_preview_image(d)
+    for rank, entry in enumerate(root.findall(f"{ATOM_NS}entry"), start=1):
+        image_url = extract_preview_image(entry)
         if not image_url:
             continue
 
-        created_iso = dt.datetime.utcfromtimestamp(d.get("created_utc", 0)).strftime(
-            "%Y-%m-%d"
-        )
+        title_el = entry.find(f"{ATOM_NS}title")
+        link_el = entry.find(f"{ATOM_NS}link")
+        published_el = entry.find(f"{ATOM_NS}published")
+
+        post_url = link_el.get("href") if link_el is not None else None
+        if not post_url:
+            continue
+
+        published = published_el.text if published_el is not None else None
+        date_iso = published[:10] if published else dt.datetime.utcnow().strftime("%Y-%m-%d")
 
         items.append(
             {
-                "title": d.get("title"),
+                "title": title_el.text if title_el is not None else "",
                 "image_url": image_url,
-                "post_url": "https://www.reddit.com" + d.get("permalink", ""),
+                "post_url": post_url,
                 "subreddit": f"r/{subreddit}",
-                "score": d.get("score", 0),
-                "comments": d.get("num_comments", 0),
-                "date": created_iso,
+                "rank": rank,
+                "date": date_iso,
             }
         )
     return items
@@ -128,30 +126,30 @@ def fetch_reddit_memes(subreddit, t="day", limit=100):
 
 SYSTEM_PROMPT = f"""Ты — редактор ежедневной подборки смешных мемов про игру GTA VI (Grand Theft Auto VI).
 
-На вход тебе даётся JSON-массив сырых постов с Reddit (заголовок, ссылка на картинку/видео,
-ссылка на пост, сабреддит, число апвоутов, число комментариев, дата).
+На вход тебе даётся JSON-массив сырых постов с Reddit (заголовок, ссылка на картинку,
+ссылка на пост, сабреддит, дата, rank — позиция поста в списке "топ дня" по версии Reddit,
+чем меньше rank, тем популярнее пост). Числа апвоутов/комментариев недоступны — источник
+данных их не отдаёт, поэтому единственный сигнал популярности — это rank.
 
 Твоя задача:
 1. Убери повторы — если один и тот же мем/картинка встречается несколько раз (репосты),
-   оставь только запись с наибольшим числом апвоутов.
+   оставь только запись с наименьшим (то есть более высоким по популярности) rank.
 2. Убери то, что НЕ является мемом/шуткой: официальные скриншоты без шутки, арт, серьёзные
    обсуждения, новостные картинки, утечки без юмористического контекста.
-3. Из оставшегося выбери не более {MAX_MEMES} самых популярных и смешных, отсортируй по
-   убыванию популярности (в первую очередь апвоуты, при близких значениях — учитывай
-   насколько заголовок "мемный"/смешной). Если реальных мемов за день меньше {MAX_MEMES} —
-   верни столько, сколько есть, не выдумывай лишние и не дублируй.
+3. Из оставшегося выбери не более {MAX_MEMES} самых смешных, отсортируй по возрастанию rank
+   (самый популярный — первым). Если реальных мемов за день меньше {MAX_MEMES} — верни
+   столько, сколько есть, не выдумывай лишние и не дублируй.
 4. Для каждого оставленного элемента верни объект с полями:
    - "caption_ru": короткая смешная подпись/пояснение на русском (до 15 слов), своими
      словами объясняющая в чём шутка (не просто перевод заголовка дословно)
    - "image_url": скопируй ТОЧНО как во входных данных
    - "post_url": скопируй ТОЧНО как во входных данных
    - "subreddit": скопируй как во входных данных
-   - "score": скопируй как во входных данных (число)
-   - "comments": скопируй как во входных данных (число)
    - "date": скопируй как во входных данных (YYYY-MM-DD)
 
-Отвечай СТРОГО валидным JSON-массивом объектов с этими полями. Никакого текста до или
-после JSON. Никаких markdown-блоков вида ```json.
+Отвечай СТРОГО валидным JSON-массивом объектов с этими полями (без rank — порядок в
+итоговом массиве и есть ранжирование). Никакого текста до или после JSON. Никаких
+markdown-блоков вида ```json.
 """
 
 
