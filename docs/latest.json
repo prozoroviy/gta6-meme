@@ -1,0 +1,98 @@
+[
+  {
+    "title_ru": "Трейлер 2: рекордные просмотры на YouTube",
+    "summary_ru": "Обошёл по просмотрам трейлер GTA V спустя 14 лет после его выхода и продолжает набирать миллионы.",
+    "metric": "~165 млн просмотров, 1 млн лайков за 40 минут",
+    "sources": [
+      {
+        "name": "GTA BOOM",
+        "url": "https://www.gtaboom.com/gta-6-trailers-launched-to-more-views-than-every-june-showcase-trailer-combined-ab32"
+      },
+      {
+        "name": "TheGamer",
+        "url": "https://www.thegamer.com/grand-theft-auto-6-second-trailer-beat-gta-5-do-views-matter-sales/"
+      },
+      {
+        "name": "Icy Veins",
+        "url": "https://www.icy-veins.com/other-games/news/gta-6-trailer-2-breaks-youtube-records-in-just-2-hours/"
+      }
+    ]
+  },
+  {
+    "title_ru": "Дата выхода: 19 ноября 2026",
+    "summary_ru": "Официальное подтверждение Rockstar после второго переноса. Игра выйдет только на PS5 и Xbox Series X|S.",
+    "metric": null,
+    "sources": [
+      {
+        "name": "Rockstar Newswire",
+        "url": "https://www.rockstargames.com/newswire/article/ak3ak31a49a221/grand-theft-auto-vi-is-now-set-to-launch-november-19-2026"
+      }
+    ]
+  },
+  {
+    "title_ru": "Цена изданий: $80 и $100 вызывают споры",
+    "summary_ru": "Стандартное издание за $80 и Ultimate Edition за $100 — аналитики обсуждают, задаст ли GTA VI новую планку цен для всей индустрии.",
+    "metric": null,
+    "sources": [
+      {
+        "name": "GTA BOOM",
+        "url": "https://www.gtaboom.com/gta-6-news-7d1f"
+      }
+    ]
+  },
+  {
+    "title_ru": "Только цифровая версия: фанаты боятся за право владения игрой",
+    "summary_ru": "На фоне отказа Sony от дисков к 2028 году GTA VI пока остаётся цифровым релизом; тема уже дошла до политиков в Бразилии и Франции.",
+    "metric": null,
+    "sources": [
+      {
+        "name": "GTA BOOM",
+        "url": "https://www.gtaboom.com/gta-6-news-7d1f"
+      }
+    ]
+  },
+  {
+    "title_ru": "Rockstar обвиняют в неравной оплате труда и переработках",
+    "summary_ru": "На фоне релиза продолжается трудовой конфликт: сотрудники жалуются на кранч и неравномерное распределение бонусов.",
+    "metric": null,
+    "sources": [
+      {
+        "name": "Обзор на Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Grand_Theft_Auto_VI"
+      }
+    ]
+  },
+  {
+    "title_ru": "GTA Online: обновление The Kortz Center Heist",
+    "summary_ru": "Новый хайст анонсирован на июль 2026 года; также идёт «самая большая» распродажа Rockstar к 4 июля с бонусами и бесплатным бункером.",
+    "metric": null,
+    "sources": [
+      {
+        "name": "GTA Online News",
+        "url": "https://www.igrandtheftauto.com/gtaonline/news/this-week-in-gta-online-july-2-2026"
+      }
+    ]
+  },
+  {
+    "title_ru": "Слух о возвращении Майкла Де Санты не подтвердился",
+    "summary_ru": "Актёр озвучки Нед Люк не подтверждал появление персонажа в GTA VI — его фраза была сарказмом, а не анонсом.",
+    "metric": null,
+    "sources": [
+      {
+        "name": "GTA BOOM",
+        "url": "https://www.gtaboom.com/gta-6-news-7d1f"
+      }
+    ]
+  },
+  {
+    "title_ru": "Новые детали из маркетинговых материалов Rockstar",
+    "summary_ru": "Из текста об Ultimate Edition фанаты выяснили про систему оружейных шкафчиков в духе RDR2, деление сюжета на главы и рыбалку как активность.",
+    "metric": null,
+    "sources": [
+      {
+        "name": "Kotaku",
+        "url": "https://kotaku.com/10-new-details-we-learned-from-gta-6s-big-info-dump-2000710519"
+      }
+    ]
+  }
+]
