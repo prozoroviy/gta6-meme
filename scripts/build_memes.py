@@ -221,7 +221,7 @@ def main():
 
     subreddits = [
         s.strip()
-        for s in os.environ.get("REDDIT_SUBREDDITS", "GTA6").split(",")
+        for s in (os.environ.get("REDDIT_SUBREDDITS") or "GTA6").split(",")
         if s.strip()
     ]
 
