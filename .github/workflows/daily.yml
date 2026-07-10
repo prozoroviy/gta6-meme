@@ -1,0 +1,39 @@
+name: GTA VI Daily Memes
+
+on:
+  schedule:
+    # Каждый день в 07:00 UTC (10:00 МСК). Формат cron: минута час день месяц день-недели
+    - cron: "0 7 * * *"
+  workflow_dispatch: {}   # позволяет запустить вручную из вкладки Actions
+
+permissions:
+  contents: write
+
+jobs:
+  build-memes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build memes digest
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          REDDIT_SUBREDDITS: ${{ vars.REDDIT_SUBREDDITS }}
+        run: python scripts/build_memes.py
+
+      - name: Commit and push updated page
+        run: |
+          git config user.name "gta6-meme-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs
+          git diff --staged --quiet || git commit -m "Мемы GTA VI: $(date -u +'%Y-%m-%d')"
+          git push
