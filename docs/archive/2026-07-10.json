@@ -1,22 +1,99 @@
 [
   {
-    "caption_ru": "Демо-карточка: так будет выглядеть мем после первого реального запуска скрипта.",
-    "image_url": "https://placehold.co/600x400/171a21/ff7a45?text=GTA+VI+meme+%231",
-    "post_url": "https://www.reddit.com/r/GTA6/",
+    "caption_ru": "Мем про бесконечные слухи о переносе даты выхода — все уже смирились с ожиданием",
+    "image_url": "https://preview.redd.it/i86uvyhu7ach1.jpeg?width=640&crop=smart&auto=webp&s=b80fb0d4b4aed14135bf5f74f8260f278763ba7f",
+    "post_url": "https://www.reddit.com/r/GTA6/comments/1us5iot/yeahok_bud_this_game_is_way_too_anticipated_for/",
+    "subreddit": "r/GTA6",
+    "date": "2026-07-09"
+  },
+  {
+    "caption_ru": "Шутка про вечный перенос релиза — 'выйдет во вторник, ну или через вторник'",
+    "image_url": "https://external-preview.redd.it/bW14dzd1eGNuYWNoMdB4u3NurtW4lrN21Y3eU909PkY8LMgevNuMEKfgGN7t.png?width=640&crop=smart&auto=webp&s=4a3b9611303fe7d1c4f8c3bd73901e80817cff35",
+    "post_url": "https://www.reddit.com/r/GTA6/comments/1us7wof/itll_drop_next_tuesday_if_not_then_the_tuesday/",
     "subreddit": "r/GTA6",
     "date": "2026-07-10"
   },
   {
-    "caption_ru": "Ещё одна демо-карточка — реальные мемы появятся после первого запуска workflow на GitHub Actions.",
-    "image_url": "https://placehold.co/600x400/171a21/7fb8ff?text=GTA+VI+meme+%232",
-    "post_url": "https://www.reddit.com/r/GTA6/",
+    "caption_ru": "Ностальгическая шутка о персонажах GTA Online, которых заменит новая тройка героев",
+    "image_url": "https://external-preview.redd.it/Z3ZpZml5N3BkZmNoMc42uA905PlpxsTLH-R4yH0FV9Falc47B37BuhfSPOMF.png?width=640&crop=smart&auto=webp&s=88890458c509dc229412833bd59a99f59feff5c0",
+    "post_url": "https://www.reddit.com/r/GTA6/comments/1usrtg8/im_going_to_miss_those_3/",
     "subreddit": "r/GTA6",
     "date": "2026-07-10"
   },
   {
-    "caption_ru": "Переключатель дат вверху страницы уже работает — попробуйте выбрать другую дату.",
-    "image_url": "https://placehold.co/600x400/171a21/eef0f3?text=GTA+VI+meme+%233",
-    "post_url": "https://www.reddit.com/r/GTA6/",
+    "caption_ru": "Игрок нашёл 'гениальный' способ ограничить локации в сюжетке — на деле просто баг геймдизайна",
+    "image_url": "https://preview.redd.it/l5sktdfpkbch1.png?width=640&crop=smart&auto=webp&s=625c612ba9f099deba405d11ba921d7f2595d8ee",
+    "post_url": "https://www.reddit.com/r/GTA6/comments/1usbsj7/a_genius_way_to_lock_locations_in_storymode/",
+    "subreddit": "r/GTA6",
+    "date": "2026-07-10"
+  },
+  {
+    "caption_ru": "Шутка про то, насколько типично 'по-флоридски' выглядит скриншот из игры",
+    "image_url": "https://preview.redd.it/2lqy47j8sbch1.jpeg?width=640&crop=smart&auto=webp&s=88863b1d5e3c6d543f2c1df8d2c8c270e6a6924b",
+    "post_url": "https://www.reddit.com/r/GTA6/comments/1uscnch/the_most_florida_thing_ever/",
+    "subreddit": "r/GTA6",
+    "date": "2026-07-10"
+  },
+  {
+    "caption_ru": "POV: ты каждый вторник обновляешь страницу Rockstar в ожидании трейлера 3",
+    "image_url": "https://external-preview.redd.it/aTVtd3l3cjF2ZWNoMdNVgcAq2DtoAUYy3H7sm7waQZH0X9NgxJp7MsxeGWLw.png?width=640&crop=smart&auto=webp&s=1d141aafb2f8e07847fe962534c30689ab5d58ce",
+    "post_url": "https://www.reddit.com/r/GTA6/comments/1usp1z2/pov_its_tuesday_and_youre_waiting_for_rockstar_to/",
+    "subreddit": "r/GTA6",
+    "date": "2026-07-10"
+  },
+  {
+    "caption_ru": "Шутка о том, что у персонажа GTA6 фигура прямо как после пластики — 'сделали бразильскую подтяжку'",
+    "image_url": "https://preview.redd.it/0a72hmjnudch1.jpeg?width=640&crop=smart&auto=webp&s=5b8a9876a8c2f54c4b5d0e5f776e5a70c4353a9b",
+    "post_url": "https://www.reddit.com/r/GTA6/comments/1usk7oh/gta6_got_bbls/",
+    "subreddit": "r/GTA6",
+    "date": "2026-07-10"
+  },
+  {
+    "caption_ru": "Настоящий вопрос эпохи: научатся ли наконец персонажи спать под одеялом",
+    "image_url": "https://preview.redd.it/4bxg6yreffch1.jpeg?width=640&crop=smart&auto=webp&s=5842f0875236c41bcb902ff672c4c53582928e10",
+    "post_url": "https://www.reddit.com/r/GTA6/comments/1uss3e8/the_real_question_will_characters_finally_be_able/",
+    "subreddit": "r/GTA6",
+    "date": "2026-07-10"
+  },
+  {
+    "caption_ru": "Шутка про безумную цену игры — 'физическую версию дешевле купить в кредит на 10 лет'",
+    "image_url": "https://preview.redd.it/4c0w2q9qibch1.jpg?width=140&height=140&crop=1:1,smart&auto=webp&s=4c9b5f606512ae7adaf25f41df54651908f04a7d",
+    "post_url": "https://www.reddit.com/r/GTA6/comments/1usbk91/cheaper_to_buy_the_physical_version_of_the_game/",
+    "subreddit": "r/GTA6",
+    "date": "2026-07-10"
+  },
+  {
+    "caption_ru": "Мем про полицейских в GTA6, которые как всегда появляются из ниоткуда за секунду",
+    "image_url": "https://preview.redd.it/fo65mmsj2fch1.jpeg?width=640&crop=smart&auto=webp&s=11468acc16a368e03b0d63c6cc711ddfcb95f125",
+    "post_url": "https://www.reddit.com/r/GTA6/comments/1usq3fy/the_cops_in_gta6/",
+    "subreddit": "r/GTA6",
+    "date": "2026-07-10"
+  },
+  {
+    "caption_ru": "Шутка о том, что фанаты готовы буквально угнать трейлер 3, лишь бы увидеть его раньше",
+    "image_url": "https://preview.redd.it/apgud0p1pech1.png?width=640&crop=smart&auto=webp&s=cbadd903315666278965730ca9f1d39e7de5db3a",
+    "post_url": "https://www.reddit.com/r/GTA6/comments/1uso3fb/cant_wait_to_steal_trailer_3/",
+    "subreddit": "r/GTA6",
+    "date": "2026-07-10"
+  },
+  {
+    "caption_ru": "Классический мем 'потянет ли этот тостер GTA6' про древний компьютер",
+    "image_url": "https://preview.redd.it/1tq0206nwfch1.png?width=640&crop=smart&auto=webp&s=d4b5b8b4dfefefb023d813b151883ae6fff43d56",
+    "post_url": "https://www.reddit.com/r/GTA6/comments/1usus0q/will_this_run_gta_6/",
+    "subreddit": "r/GTA6",
+    "date": "2026-07-10"
+  },
+  {
+    "caption_ru": "Ироничная цитата в стиле GTA — 'теперь заговорил? Нет, из принципа'",
+    "image_url": "https://preview.redd.it/modewq18kfch1.png?width=640&crop=smart&auto=webp&s=33c02d84376f6e6315bd4e7784980b7061af671c",
+    "post_url": "https://www.reddit.com/r/GTA6/comments/1ussyj2/oh_now_you_want_to_say_somethin_thats_a_no_from/",
+    "subreddit": "r/GTA6",
+    "date": "2026-07-10"
+  },
+  {
+    "caption_ru": "Ещё один вариант мема про 'потянет ли эта штука GTA6', на этот раз с другим железом",
+    "image_url": "https://preview.redd.it/2h2adoxxtfch1.jpeg?width=640&crop=smart&auto=webp&s=cf2d13f062c8cc2ea6e25880c7bed55b922fed97",
+    "post_url": "https://www.reddit.com/r/GTA6/comments/1usud1q/can_this_run_gta_6/",
     "subreddit": "r/GTA6",
     "date": "2026-07-10"
   }
